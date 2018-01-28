@@ -114,26 +114,12 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         elif cfg.CAMERA_TYPE == "D435i":
             from irmark1.parts.realsense2 import RS_D435i
             cam = RS_D435i(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE)
-        elif cfg.CAMERA_TYPE ==  "NANO-MARK1":
-            from irmark1.parts.realsense2 import RS_D435i
-            from irmark1.parts.camera import CSICamera
-
-            camA = CSICamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE, gstreamer_flip=cfg.CSIC_CAM_GSTREAMER_FLIP_PARM)
-            camB = RS_D435i(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE)
         else:
             raise(Exception("Unkown camera type: %s" % cfg.CAMERA_TYPE))
 
         if cfg.CAMERA_TYPE == "D435i":
-            V.add(cam, inputs=inputs, outputs=['cam/image_array_a', 'cam/image_array_b', 'cam/imu_array'], threaded=threaded)
-            from irmark1.parts.image import StereoPair
-            V.add(StereoPair(), inputs=['cam/image_array_a', 'cam/image_array_b'],
-            outputs=['cam/image_array'])
-        elif cfg.CAMERA_TYPE ==  "NANO-MARK1":
-            V.add(camA, outputs=['cam/image_array_a'], threaded=True)
-            V.add(camB, outputs=['cam/image_array_b', 'cam/image_array_c', 'cam/imu_array'], threaded=True)
-            from irmark1.parts.image import StereoPair
-            V.add(StereoPair(), inputs=['cam/image_array_a', 'cam/image_array_b'],
-            outputs=['cam/image_array'])
+            V.add(cam, inputs=inputs, outputs=['cam/image_array_a', 'cam/image_array_b', 'imu/acl_x', 'imu/acl_y', 'imu/acl_z',
+                'imu/gyr_x', 'imu/gyr_y', 'imu/gyr_z'], threaded=threaded)
         else:
             V.add(cam, inputs=inputs, outputs=['cam/image_array'], threaded=threaded)
 
@@ -271,7 +257,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         ctr.set_button_down_trigger('circle', show_record_acount_status)
 
     #IMU
-    if cfg.HAVE_IMU:
+    if cfg.HAVE_IMU and cfg.CAMERA_TYPE != "D435i":
         from irmark1.parts.imu import Mpu6050
         imu = Mpu6050()
         V.add(imu, outputs=['imu/acl_x', 'imu/acl_y', 'imu/acl_z',
@@ -516,15 +502,23 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         V.add(motor, inputs=["throttle"])
 
     
-    #add tub to save data
-
-    inputs=['cam/image_array', 'cam/image_array_a', 'cam/image_array_b',
+    #add tub to save data    
+    inputs=['cam/image_array', 
             'user/angle', 'user/throttle', 
             'user/mode']
+    
 
-    types=['image_array', 'image_array', 'lossless_image_array',
+    types=['image_array',
            'float', 'float',
            'str']
+
+    if cfg.CAMERA_TYPE == "D435i":
+        # remove 'cam/image_array'
+        inputs.pop(0)
+        types.pop(0)
+
+        inputs += ['cam/image_array_a', 'cam/image_array_b']
+        types += ['image_array', 'lossless_image_array']
 
     if cfg.TRAIN_BEHAVIORS:
         inputs += ['behavior/state', 'behavior/label', "behavior/one_hot_state_array"]

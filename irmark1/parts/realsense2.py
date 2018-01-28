@@ -108,8 +108,8 @@ class RS_D435i(object):
         self.running = True
 
         zero_vec = (0.0, 0.0, 0.0)
-        self.gyro = zero_vec
-        self.acc = zero_vec
+        self.gyr = zero_vec
+        self.acl = zero_vec
         self.img = None
         self.dimg = None
 
@@ -130,17 +130,17 @@ class RS_D435i(object):
         accel = frames.first_or_default(rs.stream.accel)
         gyro = frames.first_or_default(rs.stream.gyro)
         if accel and gyro:
-            self.acc = accel.as_motion_frame().get_motion_data()
-            self.gyro = gyro.as_motion_frame().get_motion_data()
-            # print('realsense accel(%f, %f, %f)' % (self.acc.x, self.acc.y, self.acc.z))
-            # print('realsense gyro(%f, %f, %f)' % (self.gyro.x, self.gyro.y, self.gyro.z))
+            self.acl = accel.as_motion_frame().get_motion_data()
+            self.gyr = gyro.as_motion_frame().get_motion_data()
+            # print('realsense accel(%f, %f, %f)' % (self.acl.x, self.acl.y, self.acl.z))
+            # print('realsense gyro(%f, %f, %f)' % (self.gyr.x, self.gyr.y, self.gyr.z))
 
     def update(self):
         while self.running:
             self.poll()
 
     def run_threaded(self):
-        return self.img, self.dimg, (self.acc, self.gyro)
+        return self.img, self.dimg, self.acl.x, self.acl.y, self.acl.z, self.gyr.x, self.gyr.y, self.gyr.z
 
     def run(self):
         self.poll()

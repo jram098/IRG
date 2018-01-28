@@ -25,7 +25,7 @@ DRIVE_LOOP_HZ = 20      # the vehicle loop will pause if faster than this speed.
 MAX_LOOPS = None        # the vehicle loop can abort after this many iterations, when given a positive integer.
 
 #CAMERA
-CAMERA_TYPE = "D435i"   # (PICAM|WEBCAM|CVCAM|CSIC|V4L|MOCK|D435i|NANO-MARK1)
+CAMERA_TYPE = "D435i"   # (PICAM|WEBCAM|CVCAM|CSIC|V4L|MOCK|D435i)
 IMAGE_W = 640
 IMAGE_H = 480
 IMAGE_DEPTH = 3         # default RGB=3, make 1 for mono
