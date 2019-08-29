@@ -1,5 +1,5 @@
 """
-Scripts to drive a donkey car remotely
+Scripts to drive an ir mark1 car remotely
 
 Usage:
     remote_cam_view.py --name=<robot_name> --broker="localhost" [--record=<path>]
@@ -12,16 +12,16 @@ import os
 import time
 import math
 from docopt import docopt
-import donkeycar as dk
+import irmark1 as m1
 import cv2
 
-from donkeycar.parts.cv import CvImageView, ImgBGR2RGB, ImgRGB2BGR, ImageScale, ImgWriter, ArrowKeyboardControls
-from donkeycar.parts.salient import SalientVis
-from donkeycar.parts.network import MQTTValuePub, MQTTValueSub
-from donkeycar.parts.transform import Lambda
-from donkeycar.parts.image import JpgToImgArr
+from irmark1.parts.cv import CvImageView, ImgBGR2RGB, ImgRGB2BGR, ImageScale, ImgWriter, ArrowKeyboardControls
+from irmark1.parts.salient import SalientVis
+from irmark1.parts.network import MQTTValuePub, MQTTValueSub
+from irmark1.parts.transform import Lambda
+from irmark1.parts.image import JpgToImgArr
 
-V = dk.vehicle.Vehicle()
+V = m1.vehicle.Vehicle()
 args = docopt(__doc__)
 print(args)
 

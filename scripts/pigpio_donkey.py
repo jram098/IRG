@@ -10,9 +10,9 @@
 # sudo update && sudo apt install pigpio python3-pigpio& sudo systemctl start pigpiod
 '''
 import os
-import donkeycar as dk
-from donkeycar.parts.controller import PS3JoystickController
-from donkeycar.parts.actuator import PWMSteering, PWMThrottle
+import irmark1 as m1
+from irmark1.parts.controller import PS3JoystickController
+from irmark1.parts.actuator import PWMSteering, PWMThrottle
 
 import pigpio
 
@@ -33,11 +33,11 @@ class PiGPIO_PWM():
         self.set_pulse(pulse)
 
 
-cfg = dk.load_config()
+cfg = m1.load_config()
 
 p = pigpio.pi()
 
-V = dk.Vehicle()
+V = m1.Vehicle()
 
 cfg.STEERING_CHANNEL = 12
 cfg.THROTTLE_CHANNEL = 13

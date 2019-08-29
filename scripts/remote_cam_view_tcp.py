@@ -1,5 +1,5 @@
 """
-Script to view a donkeycar camera remotely (when published using TcpServer)
+Script to view a mark1 camera remotely (when published using TcpServer)
 
 Usage:
     remote_cam_view_tcp.py (--ip=<ip_address>) [--record=<path>]
@@ -10,15 +10,15 @@ Options:
     
 """
 from docopt import docopt
-import donkeycar as dk
-from donkeycar.parts.cv import CvImageView, ImgBGR2RGB, ImageScale
-from donkeycar.parts.network import TCPClientValue
-from donkeycar.parts.image import JpgToImgArr
+import irmark1 as m1
+from irmark1.parts.cv import CvImageView, ImgBGR2RGB, ImageScale
+from irmark1.parts.network import TCPClientValue
+from irmark1.parts.image import JpgToImgArr
 
 args = docopt(__doc__)
 print(args)
 
-V = dk.vehicle.Vehicle()
+V = m1.vehicle.Vehicle()
 V.add(TCPClientValue("camera", args["--ip"]), outputs=["jpg"])
 V.add(JpgToImgArr(), inputs=["jpg"], outputs=["img_arr"])
 V.add(ImgBGR2RGB(), inputs=["img_arr"], outputs=["rgb"])

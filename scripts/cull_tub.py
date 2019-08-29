@@ -13,12 +13,12 @@ import os
 from docopt import docopt
 import json
 
-import donkeycar as dk
-from donkeycar.utils import *
-from donkeycar.parts.datastore import TubGroup
+import irmark1 as m1
+from irmark1.utils import *
+from irmark1.parts.datastore import TubGroup
 
 def main(tub_path, count):
-    cfg = dk.load_config('config.py')
+    cfg = m1.load_config('config.py')
     records_paths = gather_records(cfg, tub_path)
 
     record_name = "user/angle"

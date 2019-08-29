@@ -9,16 +9,16 @@ Options:
 """
 import os
 from docopt import docopt
-import donkeycar as dk
+import irmark1 as m1
 import numpy as np
 import time
-from donkeycar.utils import FPSTimer
+from irmark1.utils import FPSTimer
 
 
 def profile(model_path, model_type):
-    cfg = dk.load_config('config.py')
+    cfg = m1.load_config('config.py')
     model_path = os.path.expanduser(model_path)
-    model = dk.utils.get_model_by_type(model_type, cfg)
+    model = m1.utils.get_model_by_type(model_type, cfg)
     model.load(model_path)
     
     count, h, w, ch = 1, cfg.TARGET_H, cfg.TARGET_W, cfg.TARGET_D

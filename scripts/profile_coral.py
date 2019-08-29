@@ -1,7 +1,7 @@
 import argparse
-from donkeycar.parts.coral import InferenceEngine
+from irmark1.parts.coral import InferenceEngine
 from PIL import Image
-from donkeycar.utils import FPSTimer
+from irmark1.utils import FPSTimer
 import numpy as np
 
 def main():

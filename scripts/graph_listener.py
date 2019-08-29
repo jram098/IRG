@@ -3,14 +3,14 @@ import os
 import time
 import math
 from docopt import docopt
-import donkeycar as dk
+import irmark1 as m1
 
-from donkeycar.parts.cv import CvImageView
-from donkeycar.parts.graph import Graph
-from donkeycar.parts.network import ZMQValueSub
-from donkeycar.parts.transform import Lambda
+from irmark1.parts.cv import CvImageView
+from irmark1.parts.graph import Graph
+from irmark1.parts.network import ZMQValueSub
+from irmark1.parts.transform import Lambda
 
-V = dk.vehicle.Vehicle()
+V = m1.vehicle.Vehicle()
 ip = "localhost"
 w = 640
 h = 480
