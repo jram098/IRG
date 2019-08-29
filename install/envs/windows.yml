@@ -1,4 +1,4 @@
-name: donkey
+name: irg
 dependencies:
 
 - h5py
