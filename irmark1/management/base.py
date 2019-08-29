@@ -7,11 +7,11 @@ import argparse
 import json
 import time
 
-import donkeycar as dk
-from donkeycar.parts.datastore import Tub
-from donkeycar.utils import *
-from donkeycar.management.tub import TubManager
-from donkeycar.management.joystick_creator import CreateJoystick
+import irmark1 as m1
+from irmark1.parts.datastore import Tub
+from irmark1.utils import *
+from irmark1.management.tub import TubManager
+from irmark1.management.joystick_creator import CreateJoystick
 import numpy as np
 
 PACKAGE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -38,7 +38,7 @@ def load_config(config_path):
         return None
 
     try:
-        cfg = dk.load_config(conf)
+        cfg = m1.load_config(conf)
     except:
         print("Exception while loading config from", conf)
         return None
@@ -67,8 +67,8 @@ class CreateCar(BaseCommand):
     
     def create_car(self, path, template='complete', overwrite=False):
         """
-        This script sets up the folder structure for donkey to work.
-        It must run without donkey installed so that people installing with
+        This script sets up the folder structure for mark1 to work.
+        It must run without mark1 installed so that people installing with
         docker can build the folder structure for docker to mount to.
         """
 
@@ -130,7 +130,7 @@ class CreateCar(BaseCommand):
             mcfg.close()
 
  
-        print("Donkey setup complete.")
+        print("IR Mark I setup complete.")
 
 
 class UpdateCar(BaseCommand):
@@ -180,8 +180,8 @@ class CalibrateCar(BaseCommand):
         return parsed_args
 
     def run(self, args):
-        from donkeycar.parts.actuator import PCA9685
-        from donkeycar.parts.sombrero import Sombrero
+        from irmark1.parts.actuator import PCA9685
+        from irmark1.parts.sombrero import Sombrero
 
         s = Sombrero()
 
@@ -239,7 +239,7 @@ class MakeMovieShell(BaseCommand):
         '''
         args, parser = self.parse_args(args)
 
-        from donkeycar.management.makemovie import MakeMovie
+        from irmark1.management.makemovie import MakeMovie
 
         mm = MakeMovie()
         mm.run(args, parser)
@@ -287,7 +287,7 @@ class ShowHistogram(BaseCommand):
         Produce a histogram of record type frequency in the given tub
         '''
         from matplotlib import pyplot as plt
-        from donkeycar.parts.datastore import TubGroup
+        from irmark1.parts.datastore import TubGroup
 
         tg = TubGroup(tub_paths=tub_paths)
         if record_name is not None:
@@ -458,7 +458,7 @@ class ShowPredictionPlots(BaseCommand):
         import pandas as pd
 
         model_path = os.path.expanduser(model_path)
-        model = dk.utils.get_model_by_type(model_type, cfg)
+        model = m1.utils.get_model_by_type(model_type, cfg)
         # This just gets us the text for the plot title:
         if model_type is None:
             model_type = cfg.DEFAULT_MODEL_TYPE
@@ -527,7 +527,7 @@ class ShowPredictionPlots(BaseCommand):
 
 def execute_from_command_line():
     """
-    This is the function linked to the "donkey" terminal command.
+    This is the function linked to the "irg" terminal command.
     """
     commands = {
             'createcar': CreateCar,
@@ -552,8 +552,8 @@ def execute_from_command_line():
         c = command()
         c.run(args[2:])
     else:
-        dk.utils.eprint('Usage: The available commands are:')
-        dk.utils.eprint(list(commands.keys()))
+        m1.utils.eprint('Usage: The available commands are:')
+        m1.utils.eprint(list(commands.keys()))
         
     
 if __name__ == "__main__":

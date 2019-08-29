@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
-from donkeycar.parts.keras import *
-from donkeycar.utils import *
+from irmark1.parts.keras import *
+from irmark1.utils import *
 import numpy as np
 
 @pytest.fixture

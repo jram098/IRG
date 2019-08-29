@@ -5,9 +5,9 @@ import json
 import time
 import math
 
-from donkeycar.parts.datastore import Tub
-from donkeycar.utils import *
-from donkeycar.parts.controller import JoystickCreatorController
+from irmark1.parts.datastore import Tub
+from irmark1.utils import *
+from irmark1.parts.controller import JoystickCreatorController
 
 try:
     from prettytable import PrettyTable
@@ -88,7 +88,7 @@ class CreateJoystick(object):
         print("##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##")
         print("## Welcome to Joystick Creator Wizard. ##")
         print("##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##")
-        print("This will generate code to use your joystick with a Donkey car.")
+        print("This will generate code to use your joystick with an IR Mark I car.")
         print()
         print("Overview:")
         print()
@@ -136,7 +136,7 @@ class CreateJoystick(object):
         self.shutdown()
 
     def init_js_device(self):
-        from donkeycar.parts.controller import JoystickCreatorController
+        from irmark1.parts.controller import JoystickCreatorController
 
         js_cr = None
 
@@ -349,7 +349,7 @@ class CreateJoystick(object):
                 classname = "MyJoystick"
             file_header = \
             '''
-from donkeycar.parts.controller import Joystick, JoystickController
+from irmark1.parts.controller import Joystick, JoystickController
 
 
 class %s(Joystick):

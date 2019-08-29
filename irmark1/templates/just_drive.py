@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scripts to drive a donkey 2 car
+Scripts to drive an IR Mark I (2) car
 
 Usage:
     manage.py (drive)
@@ -13,9 +13,9 @@ import time
 
 from docopt import docopt
 
-import donkeycar as dk
-from donkeycar.parts.datastore import TubHandler
-from donkeycar.parts.actuator import PCA9685, PWMSteering, PWMThrottle
+import irmark1 as m1
+from irmark1.parts.datastore import TubHandler
+from irmark1.parts.actuator import PCA9685, PWMSteering, PWMThrottle
 
 
 def drive(cfg):

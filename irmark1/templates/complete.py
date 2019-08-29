@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scripts to drive a donkey 2 car
+Scripts to drive an IR Mark One (2) car
 
 Usage:
     manage.py (drive) [--model=<model>] [--js] [--type=(linear|categorical|rnn|imu|behavior|3d|localizer|latent)] [--camera=(single|stereo)] [--meta=<key:value> ...]
@@ -19,17 +19,17 @@ import time
 from docopt import docopt
 import numpy as np
 
-import donkeycar as dk
+import irmark1 as m1
 
 #import parts
-from donkeycar.parts.transform import Lambda, TriggeredCallback, DelayedTrigger
-from donkeycar.parts.datastore import TubHandler
-from donkeycar.parts.controller import LocalWebController, JoystickController
-from donkeycar.parts.throttle_filter import ThrottleFilter
-from donkeycar.parts.behavior import BehaviorPart
-from donkeycar.parts.file_watcher import FileWatcher
-from donkeycar.parts.launch import AiLaunch
-from donkeycar.utils import *
+from irmark1.parts.transform import Lambda, TriggeredCallback, DelayedTrigger
+from irmark1.parts.datastore import TubHandler
+from irmark1.parts.controller import LocalWebController, JoystickController
+from irmark1.parts.throttle_filter import ThrottleFilter
+from irmark1.parts.behavior import BehaviorPart
+from irmark1.parts.file_watcher import FileWatcher
+from irmark1.parts.launch import AiLaunch
+from irmark1.utils import *
 
 def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type='single', meta=[] ):
     '''
@@ -56,18 +56,18 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             model_type = cfg.DEFAULT_MODEL_TYPE
     
     #Initialize car
-    V = dk.vehicle.Vehicle()
+    V = m1.vehicle.Vehicle()
 
     if camera_type == "stereo":
 
         if cfg.CAMERA_TYPE == "WEBCAM":
-            from donkeycar.parts.camera import Webcam            
+            from irmark1.parts.camera import Webcam            
 
             camA = Webcam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, iCam = 0)
             camB = Webcam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, iCam = 1)
 
         elif cfg.CAMERA_TYPE == "CVCAM":
-            from donkeycar.parts.cv import CvCam
+            from irmark1.parts.cv import CvCam
 
             camA = CvCam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, iCam = 0)
             camB = CvCam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, iCam = 1)
@@ -77,7 +77,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         V.add(camA, outputs=['cam/image_array_a'], threaded=True)
         V.add(camB, outputs=['cam/image_array_b'], threaded=True)
 
-        from donkeycar.parts.image import StereoPair
+        from irmark1.parts.image import StereoPair
 
         V.add(StereoPair(), inputs=['cam/image_array_a', 'cam/image_array_b'], 
             outputs=['cam/image_array'])
@@ -85,33 +85,33 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     else:
         print("cfg.CAMERA_TYPE", cfg.CAMERA_TYPE)
         if cfg.DONKEY_GYM:
-            from donkeycar.parts.dgym import DonkeyGymEnv 
+            from irmark1.parts.dgym import DonkeyGymEnv 
         
         inputs = []
         threaded = True
         print("cfg.CAMERA_TYPE", cfg.CAMERA_TYPE)
         if cfg.DONKEY_GYM:
-            from donkeycar.parts.dgym import DonkeyGymEnv 
+            from irmark1.parts.dgym import DonkeyGymEnv 
             cam = DonkeyGymEnv(cfg.DONKEY_SIM_PATH, env_name=cfg.DONKEY_GYM_ENV_NAME)
             threaded = True
             inputs = ['angle', 'throttle']
         elif cfg.CAMERA_TYPE == "PICAM":
-            from donkeycar.parts.camera import PiCamera
+            from irmark1.parts.camera import PiCamera
             cam = PiCamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH)
         elif cfg.CAMERA_TYPE == "WEBCAM":
-            from donkeycar.parts.camera import Webcam
+            from irmark1.parts.camera import Webcam
             cam = Webcam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH)
         elif cfg.CAMERA_TYPE == "CVCAM":
-            from donkeycar.parts.cv import CvCam
+            from irmark1.parts.cv import CvCam
             cam = CvCam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH)
         elif cfg.CAMERA_TYPE == "CSIC":
-            from donkeycar.parts.camera import CSICamera
+            from irmark1.parts.camera import CSICamera
             cam = CSICamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE, gstreamer_flip=cfg.CSIC_CAM_GSTREAMER_FLIP_PARM)
         elif cfg.CAMERA_TYPE == "V4L":
-            from donkeycar.parts.camera import V4LCamera
+            from irmark1.parts.camera import V4LCamera
             cam = V4LCamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE)
         elif cfg.CAMERA_TYPE == "MOCK":
-            from donkeycar.parts.camera import MockCamera
+            from irmark1.parts.camera import MockCamera
             cam = MockCamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH)
         else:
             raise(Exception("Unkown camera type: %s" % cfg.CAMERA_TYPE))
@@ -121,12 +121,12 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     if use_joystick or cfg.USE_JOYSTICK_AS_DEFAULT:
         #modify max_throttle closer to 1.0 to have more power
         #modify steering_scale lower than 1.0 to have less responsive steering
-        from donkeycar.parts.controller import get_js_controller
+        from irmark1.parts.controller import get_js_controller
         
         ctr = get_js_controller(cfg)
         
         if cfg.USE_NETWORKED_JS:
-            from donkeycar.parts.controller import JoyStickSub
+            from irmark1.parts.controller import JoyStickSub
             netwkJs = JoyStickSub(cfg.NETWORK_JS_SERVER_IP)
             V.add(netwkJs, threaded=True)
             ctr.js = netwkJs
@@ -196,7 +196,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             return 0
 
     if cfg.HAVE_RGB_LED and not cfg.DONKEY_GYM:
-        from donkeycar.parts.led_status import RGB_LED
+        from irmark1.parts.led_status import RGB_LED
         led = RGB_LED(cfg.LED_PIN_R, cfg.LED_PIN_G, cfg.LED_PIN_B, cfg.LED_INVERT)
         led.set_rgb(cfg.LED_R, cfg.LED_G, cfg.LED_B)        
         
@@ -253,12 +253,12 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     #Sombrero
     if cfg.HAVE_SOMBRERO:
-        from donkeycar.parts.sombrero import Sombrero
+        from irmark1.parts.sombrero import Sombrero
         s = Sombrero()
 
     #IMU
     if cfg.HAVE_IMU:
-        from donkeycar.parts.imu import Mpu6050
+        from irmark1.parts.imu import Mpu6050
         imu = Mpu6050()
         V.add(imu, outputs=['imu/acl_x', 'imu/acl_y', 'imu/acl_z',
             'imu/gyr_x', 'imu/gyr_y', 'imu/gyr_z'], threaded=True)
@@ -334,7 +334,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     if model_path:
         #When we have a model, first create an appropriate Keras part
-        kl = dk.utils.get_model_by_type(model_type, cfg)
+        kl = m1.utils.get_model_by_type(model_type, cfg)
 
         model_reload_cb = None
 
@@ -443,7 +443,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         pass
 
     elif cfg.DRIVE_TRAIN_TYPE == "SERVO_ESC":
-        from donkeycar.parts.actuator import PCA9685, PWMSteering, PWMThrottle
+        from irmark1.parts.actuator import PCA9685, PWMSteering, PWMThrottle
 
         steering_controller = PCA9685(cfg.STEERING_CHANNEL, cfg.PCA9685_I2C_ADDR, busnum=cfg.PCA9685_I2C_BUSNUM)
         steering = PWMSteering(controller=steering_controller,
@@ -461,7 +461,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     
 
     elif cfg.DRIVE_TRAIN_TYPE == "DC_STEER_THROTTLE":
-        from donkeycar.parts.actuator import Mini_HBridge_DC_Motor_PWM
+        from irmark1.parts.actuator import Mini_HBridge_DC_Motor_PWM
         
         steering = Mini_HBridge_DC_Motor_PWM(cfg.HBRIDGE_PIN_LEFT, cfg.HBRIDGE_PIN_RIGHT)
         throttle = Mini_HBridge_DC_Motor_PWM(cfg.HBRIDGE_PIN_FWD, cfg.HBRIDGE_PIN_BWD)
@@ -471,7 +471,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     
 
     elif cfg.DRIVE_TRAIN_TYPE == "DC_TWO_WHEEL":
-        from donkeycar.parts.actuator import TwoWheelSteeringThrottle, Mini_HBridge_DC_Motor_PWM
+        from irmark1.parts.actuator import TwoWheelSteeringThrottle, Mini_HBridge_DC_Motor_PWM
 
         left_motor = Mini_HBridge_DC_Motor_PWM(cfg.HBRIDGE_PIN_LEFT_FWD, cfg.HBRIDGE_PIN_LEFT_BWD)
         right_motor = Mini_HBridge_DC_Motor_PWM(cfg.HBRIDGE_PIN_RIGHT_FWD, cfg.HBRIDGE_PIN_RIGHT_BWD)
@@ -485,7 +485,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         V.add(right_motor, inputs=['right_motor_speed'])
 
     elif cfg.DRIVE_TRAIN_TYPE == "SERVO_HBRIDGE_PWM":
-        from donkeycar.parts.actuator import ServoBlaster, PWMSteering
+        from irmark1.parts.actuator import ServoBlaster, PWMSteering
         steering_controller = ServoBlaster(cfg.STEERING_CHANNEL) #really pin
         #PWM pulse values should be in the range of 100 to 200
         assert(cfg.STEERING_LEFT_PWM <= 200)
@@ -495,7 +495,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
                                         right_pulse=cfg.STEERING_RIGHT_PWM)
        
 
-        from donkeycar.parts.actuator import Mini_HBridge_DC_Motor_PWM
+        from irmark1.parts.actuator import Mini_HBridge_DC_Motor_PWM
         motor = Mini_HBridge_DC_Motor_PWM(cfg.HBRIDGE_PIN_FWD, cfg.HBRIDGE_PIN_BWD)
 
         V.add(steering, inputs=['angle'])
@@ -532,8 +532,8 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     V.add(tub, inputs=inputs, outputs=["tub/num_records"], run_condition='recording')
 
     if cfg.PUB_CAMERA_IMAGES:
-        from donkeycar.parts.network import TCPServeValue
-        from donkeycar.parts.image import ImgArrToJpg
+        from irmark1.parts.network import TCPServeValue
+        from irmark1.parts.image import ImgArrToJpg
         pub = TCPServeValue("camera")
         V.add(ImgArrToJpg(), inputs=['cam/image_array'], outputs=['jpg/bin'])
         V.add(pub, inputs=['jpg/bin'])
@@ -563,7 +563,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
 if __name__ == '__main__':
     args = docopt(__doc__)
-    cfg = dk.load_config()
+    cfg = m1.load_config()
     
     if args['drive']:
         model_type = args['--type']

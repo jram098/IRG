@@ -5,7 +5,7 @@ import logging
 import numpy
 from PIL import Image, ImageDraw
 
-from donkeycar.utils import norm_deg, dist, deg2rad, arr_to_img
+from irmark1.utils import norm_deg, dist, deg2rad, arr_to_img
 
 
 class Path(object):
@@ -139,7 +139,7 @@ class PlotCircle(object):
 
         return img
 
-from donkeycar.la import Line3D, Vec3
+from irmark1.la import Line3D, Vec3
 
 class CTE(object):
 

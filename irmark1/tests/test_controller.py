@@ -1,6 +1,6 @@
 import pytest
 from .setup import on_pi
-from donkeycar.parts.controller import PS3Joystick, PS3JoystickController
+from irmark1.parts.controller import PS3Joystick, PS3JoystickController
 
 
 def test_ps3_joystick():

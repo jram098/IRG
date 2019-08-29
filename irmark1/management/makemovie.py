@@ -10,10 +10,10 @@ try:
 except:
     raise Exception("Please install keras-vis: pip install git+https://github.com/autorope/keras-vis.git")
 
-import donkeycar as dk
-from donkeycar.parts.datastore import Tub
-from donkeycar.utils import *
-from donkeycar.management.tub import TubManager
+import irmark1 as m1
+from irmark1.parts.datastore import Tub
+from irmark1.utils import *
+from irmark1.management.tub import TubManager
 
 class MakeMovie(object):
     def __init__(self):
@@ -47,7 +47,7 @@ class MakeMovie(object):
                  location or run from dir containing config.py." % conf)
             return
 
-        self.cfg = dk.load_config(conf)
+        self.cfg = m1.load_config(conf)
         self.tub = Tub(args.tub)
         self.index = self.tub.get_index(shuffled=False)
         start = args.start
@@ -142,7 +142,7 @@ class MakeMovie(object):
         '''
         query the model for it's prediction, draw the distribution of steering choices
         '''
-        from donkeycar.parts.keras import KerasCategorical
+        from irmark1.parts.keras import KerasCategorical
 
         if self.keras_part is None or type(self.keras_part) is not KerasCategorical:
             return

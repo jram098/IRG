@@ -3,7 +3,7 @@ import time
 import numpy as np
 from PIL import Image
 import glob
-from donkeycar.utils import rgb2gray
+from irmark1.utils import rgb2gray
 
 class BaseCamera:
 
@@ -234,7 +234,7 @@ class V4LCamera(BaseCamera):
 
     def update(self):
         import select
-        from donkeycar.parts.image import JpgToImgArr
+        from irmark1.parts.image import JpgToImgArr
 
         self.init_video()
         jpg_conv = JpgToImgArr()

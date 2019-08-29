@@ -1,5 +1,5 @@
 from datetime import datetime
-import donkeycar as dk
+import irmark1 as m1
 import re
 import time
 
@@ -8,7 +8,7 @@ class TeensyRCin:
         self.inSteering = 0.0
         self.inThrottle = 0.0
 
-        self.sensor = dk.parts.actuator.Teensy(0)
+        self.sensor = m1.parts.actuator.Teensy(0)
 
         TeensyRCin.LEFT_ANGLE = -1.0
         TeensyRCin.RIGHT_ANGLE = 1.0

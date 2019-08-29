@@ -110,7 +110,7 @@ class LocalWebController(tornado.web.Application):
         the web handlers.
         '''
 
-        print('Starting Donkey Server...')
+        print('Starting IRG Server...')
 
         this_dir = os.path.dirname(os.path.realpath(__file__))
         self.static_file_path = os.path.join(this_dir, 'templates', 'static')

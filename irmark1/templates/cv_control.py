@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scripts to drive a donkey 2 car
+Scripts to drive an IR Mark I (2) car
 
 Usage:
     manage.py (drive)
@@ -15,9 +15,9 @@ import time
 from docopt import docopt
 import numpy as np
 
-import donkeycar as dk
-from donkeycar.parts.datastore import TubHandler
-from donkeycar.parts.camera import PiCamera
+import irmark1 as m1
+from irmark1.parts.datastore import TubHandler
+from irmark1.parts.camera import PiCamera
 
 
 class MyCVController:
@@ -49,7 +49,7 @@ def drive(cfg):
     '''
     
     #Initialize car
-    V = dk.vehicle.Vehicle()
+    V = m1.vehicle.Vehicle()
 
     #Camera
     cam = PiCamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH)
@@ -63,13 +63,13 @@ def drive(cfg):
        
     #Sombrero
     if cfg.HAVE_SOMBRERO:
-        from donkeycar.parts.sombrero import Sombrero
+        from irmark1.parts.sombrero import Sombrero
         s = Sombrero()
 
         
     #Drive train setup
 
-    from donkeycar.parts.actuator import PCA9685, PWMSteering, PWMThrottle
+    from irmark1.parts.actuator import PCA9685, PWMSteering, PWMThrottle
 
     steering_controller = PCA9685(cfg.STEERING_CHANNEL, cfg.PCA9685_I2C_ADDR, busnum=cfg.PCA9685_I2C_BUSNUM)
     steering = PWMSteering(controller=steering_controller,
@@ -104,7 +104,7 @@ def drive(cfg):
 
 if __name__ == '__main__':
     args = docopt(__doc__)
-    cfg = dk.load_config()
+    cfg = m1.load_config()
     
     if args['drive']:
         drive(cfg)

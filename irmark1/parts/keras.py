@@ -26,7 +26,7 @@ from tensorflow.python.keras.layers import LSTM
 from tensorflow.python.keras.layers.wrappers import TimeDistributed as TD
 from tensorflow.python.keras.layers import Conv3D, MaxPooling3D, Cropping3D, Conv2DTranspose
 
-import donkeycar as dk
+import irmark1 as m1
 
 # Override keras session to work around a bug in TF 1.13.1
 # Remove after we upgrade to TF 1.14 / TF 2.x.
@@ -110,7 +110,7 @@ class KerasCategorical(KerasPilot):
     angles and then uses categorical cross entropy to train the network to activate a single
     neuron for each steering and throttle choice. This can be interesting because we
     get the confidence value as a distribution over all choices.
-    This uses the dk.utils.linear_bin and dk.utils.linear_unbin to transform continuous
+    This uses the m1.utils.linear_bin and m1.utils.linear_unbin to transform continuous
     real numbers into a range of discreet values for training and runtime.
     The input and output are therefore bounded and must be chosen wisely to match the data.
     The default ranges work for the default setup. But cars which go faster may want to
@@ -136,8 +136,8 @@ class KerasCategorical(KerasPilot):
         img_arr = img_arr.reshape((1,) + img_arr.shape)
         angle_binned, throttle = self.model.predict(img_arr)
         N = len(throttle[0])
-        throttle = dk.utils.linear_unbin(throttle, N=N, offset=0.0, R=self.throttle_range)
-        angle_unbinned = dk.utils.linear_unbin(angle_binned)
+        throttle = m1.utils.linear_unbin(throttle, N=N, offset=0.0, R=self.throttle_range)
+        angle_unbinned = m1.utils.linear_unbin(angle_binned)
         return angle_unbinned, throttle
     
     
@@ -234,10 +234,10 @@ class KerasBehavioral(KerasPilot):
         N = len(throttle[0])
         
         if N > 0:
-            throttle = dk.utils.linear_unbin(throttle, N=N, offset=0.0, R=0.5)
+            throttle = m1.utils.linear_unbin(throttle, N=N, offset=0.0, R=0.5)
         else:
             throttle = throttle[0][0]
-        angle_unbinned = dk.utils.linear_unbin(angle_binned)
+        angle_unbinned = m1.utils.linear_unbin(angle_binned)
         return angle_unbinned, throttle
 
 
@@ -267,10 +267,10 @@ class KerasLocalizer(KerasPilot):
         loc = np.argmax(track_loc[0])
         
         if N > 0:
-            throttle = dk.utils.linear_unbin(throttle, N=N, offset=0.0, R=0.5)
+            throttle = m1.utils.linear_unbin(throttle, N=N, offset=0.0, R=0.5)
         else:
             throttle = throttle[0][0]
-        angle_unbinned = dk.utils.linear_unbin(angle_binned)
+        angle_unbinned = m1.utils.linear_unbin(angle_binned)
         print("angle_unbinned", angle_unbinned, "throttle", throttle)
         
         return angle_unbinned, throttle, loc
@@ -508,7 +508,7 @@ class KerasRNN_LSTM(KerasPilot):
 
     def run(self, img_arr):
         if img_arr.shape[2] == 3 and self.image_d == 1:
-            img_arr = dk.utils.rgb2gray(img_arr)
+            img_arr = m1.utils.rgb2gray(img_arr)
 
         while len(self.img_seq) < self.seq_length:
             self.img_seq.append(img_arr)
@@ -576,7 +576,7 @@ class Keras3D_CNN(KerasPilot):
     def run(self, img_arr):
 
         if img_arr.shape[2] == 3 and self.image_d == 1:
-            img_arr = dk.utils.rgb2gray(img_arr)
+            img_arr = m1.utils.rgb2gray(img_arr)
 
         while len(self.img_seq) < self.seq_length:
             self.img_seq.append(img_arr)

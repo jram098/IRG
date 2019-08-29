@@ -1,5 +1,5 @@
 from collections import namedtuple
-from donkeycar.parts.keras import KerasPilot
+from irmark1.parts.keras import KerasPilot
 import json
 import numpy as np
 import pycuda.driver as cuda

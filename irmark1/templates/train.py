@@ -31,13 +31,13 @@ from docopt import docopt
 import numpy as np
 from PIL import Image
 
-import donkeycar as dk
-from donkeycar.parts.datastore import Tub
-from donkeycar.parts.keras import KerasLinear, KerasIMU,\
+import irmark1 as m1
+from irmark1.parts.datastore import Tub
+from irmark1.parts.keras import KerasLinear, KerasIMU,\
      KerasCategorical, KerasBehavioral, Keras3D_CNN,\
      KerasRNN_LSTM, KerasLatent
-from donkeycar.parts.augment import augment_image
-from donkeycar.utils import *
+from irmark1.parts.augment import augment_image
+from irmark1.utils import *
 
 
 '''
@@ -104,8 +104,8 @@ def collate_records(records, gen_records, opts):
         throttle = float(json_data["user/throttle"])
 
         if opts['categorical']:
-            angle = dk.utils.linear_bin(angle)
-            throttle = dk.utils.linear_bin(throttle, N=20, offset=0, R=opts['cfg'].MODEL_CATEGORICAL_MAX_THROTTLE_RANGE)
+            angle = m1.utils.linear_bin(angle)
+            throttle = m1.utils.linear_bin(throttle, N=20, offset=0, R=opts['cfg'].MODEL_CATEGORICAL_MAX_THROTTLE_RANGE)
 
         sample['angle'] = angle
         sample['throttle'] = throttle
@@ -655,7 +655,7 @@ def go_train(kl, cfg, train_gen, val_gen, gen_records, model_name, steps_per_epo
         else:
             representative_dataset_gen = None
 
-        from donkeycar.parts.tflite import keras_model_to_tflite
+        from irmark1.parts.tflite import keras_model_to_tflite
         keras_model_to_tflite(model_path, tflite_fnm, representative_dataset_gen)
         print("Saved TFLite model:", tflite_fnm)
         if prepare_for_coral:
@@ -754,7 +754,7 @@ def sequence_train(cfg, tub_names, model_name, transfer_model, model_type, conti
 
     print("sequence of images training")    
 
-    kl = dk.utils.get_model_by_type(model_type=model_type, cfg=cfg)
+    kl = m1.utils.get_model_by_type(model_type=model_type, cfg=cfg)
     
     tubs = gather_tubs(cfg, tub_names)
     
@@ -1074,7 +1074,7 @@ def preprocessFileList( filelist ):
 
 if __name__ == "__main__":
     args = docopt(__doc__)
-    cfg = dk.load_config()
+    cfg = m1.load_config()
     tub = args['--tub']
     model = args['--model']
     transfer = args['--transfer']

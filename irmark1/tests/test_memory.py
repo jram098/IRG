@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 import pytest
-from donkeycar.memory import Memory
+from irmark1.memory import Memory
 
 class TestMemory(unittest.TestCase):
 

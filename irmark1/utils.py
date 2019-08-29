@@ -140,7 +140,7 @@ def load_scaled_image_arr(filename, cfg):
     load an image from the filename, and use the cfg to resize if needed
     also apply cropping and normalize
     '''
-    import donkeycar as dk
+    import irmark1 as m1
     try:
         img = Image.open(filename)
         if img.height != cfg.IMAGE_H or img.width != cfg.IMAGE_W:
@@ -150,7 +150,7 @@ def load_scaled_image_arr(filename, cfg):
         croppedImgH = img_arr.shape[0]
         croppedImgW = img_arr.shape[1]
         if img_arr.shape[2] == 3 and cfg.IMAGE_DEPTH == 1:
-            img_arr = dk.utils.rgb2gray(img_arr).reshape(croppedImgH, croppedImgW, 1)
+            img_arr = m1.utils.rgb2gray(img_arr).reshape(croppedImgH, croppedImgW, 1)
     except Exception as e:
         print(e)
         print('failed to load image:', filename)
@@ -382,7 +382,7 @@ def gather_tubs(cfg, tub_names):
     takes as input the configuration, and the comma seperated list of tub paths
     returns a list of Tub objects initialized to each path
     '''
-    from donkeycar.parts.datastore import Tub
+    from irmark1.parts.datastore import Tub
     
     tub_paths = gather_tub_paths(cfg, tub_names)
     tubs = [Tub(p) for p in tub_paths]
@@ -421,8 +421,8 @@ def get_model_by_type(model_type, cfg):
     given the string model_type and the configuration settings in cfg
     create a Keras model and return it.
     '''
-    from donkeycar.parts.keras import KerasRNN_LSTM, KerasBehavioral, KerasCategorical, KerasIMU, KerasLinear, Keras3D_CNN, KerasLocalizer, KerasLatent
-    from donkeycar.parts.tflite import TFLitePilot
+    from irmark1.parts.keras import KerasRNN_LSTM, KerasBehavioral, KerasCategorical, KerasIMU, KerasLinear, Keras3D_CNN, KerasLocalizer, KerasLatent
+    from irmark1.parts.tflite import TFLitePilot
  
     if model_type is None:
         model_type = cfg.DEFAULT_MODEL_TYPE
@@ -444,10 +444,10 @@ def get_model_by_type(model_type, cfg):
     elif model_type == "tensorrt_linear":
         # Aggressively lazy load this. This module imports pycuda.autoinit which causes a lot of unexpected things
         # to happen when using TF-GPU for training.
-        from donkeycar.parts.tensorrt import TensorRTLinear
+        from irmark1.parts.tensorrt import TensorRTLinear
         kl = TensorRTLinear(cfg=cfg)
     elif model_type == "coral_tflite_linear":
-        from donkeycar.parts.coral import CoralLinearPilot
+        from irmark1.parts.coral import CoralLinearPilot
         kl = CoralLinearPilot()
     elif model_type == "3d":
         kl = Keras3D_CNN(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, seq_length=cfg.SEQUENCE_LENGTH)
@@ -458,7 +458,7 @@ def get_model_by_type(model_type, cfg):
     elif model_type == "latent":
         kl = KerasLatent(input_shape=input_shape)
     elif model_type == "fastai":
-        from donkeycar.parts.fastai import FastAiPilot
+        from irmark1.parts.fastai import FastAiPilot
         kl = FastAiPilot()
     else:
         raise Exception("unknown model type: %s" % model_type)

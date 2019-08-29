@@ -1,8 +1,8 @@
 import pytest
 import time
 
-from donkeycar import utils
-from donkeycar.parts.launch import *
+from irmark1 import utils
+from irmark1.parts.launch import *
 
 
 def test_ai_launch():

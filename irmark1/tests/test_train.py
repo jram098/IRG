@@ -2,11 +2,11 @@
 import pytest
 import os
 
-from donkeycar.templates.train import multi_train
-from donkeycar.parts.datastore import Tub
-from donkeycar.parts.simulation import SquareBoxCamera, MovingSquareTelemetry
+from irmark1.templates.train import multi_train
+from irmark1.parts.datastore import Tub
+from irmark1.parts.simulation import SquareBoxCamera, MovingSquareTelemetry
 
-from donkeycar.templates.train import gather_records, collate_records
+from irmark1.templates.train import gather_records, collate_records
 
 #fixtures
 from .setup import tub, tub_path, on_pi
@@ -28,7 +28,7 @@ def test_train_cat(tub, tub_path):
     t = Tub(tub_path)
     assert t is not None
 
-    import donkeycar.templates.cfg_complete as cfg
+    import irmark1.templates.cfg_complete as cfg
     tempfolder = tub_path[:-3]
     model_path = os.path.join(tempfolder, 'test.h5')
     cfg_defaults(cfg)
@@ -46,7 +46,7 @@ def test_train_linear(tub, tub_path):
     t = Tub(tub_path)
     assert t is not None
 
-    import donkeycar.templates.cfg_complete as cfg
+    import irmark1.templates.cfg_complete as cfg
     tempfolder = tub_path[:-3]
     model_path = os.path.join(tempfolder, 'test.h5')
     cfg_defaults(cfg)
@@ -69,7 +69,7 @@ def test_train_latent(tub, tub_path):
     t = Tub(tub_path)
     assert t is not None
 
-    import donkeycar.templates.cfg_complete as cfg
+    import irmark1.templates.cfg_complete as cfg
     tempfolder = tub_path[:-3]
     model_path = os.path.join(tempfolder, 'test.h5')
     cfg.MAX_EPOCHS = 1
@@ -92,7 +92,7 @@ def test_train_seq(tub, tub_path):
     t = Tub(tub_path)
     assert t is not None
 
-    import donkeycar.templates.cfg_complete as cfg
+    import irmark1.templates.cfg_complete as cfg
     tempfolder = tub_path[:-3]
     model_path = os.path.join(tempfolder, 'test.h5')
     cfg_defaults(cfg)
@@ -134,7 +134,7 @@ def test_train_TrainTestSplit_simple(tub_path):
     assert t is not None
 
     # Import the configuration
-    import donkeycar.templates.cfg_complete as cfg
+    import irmark1.templates.cfg_complete as cfg
 
     # Initial Setup
     opts = {'categorical' : False}
@@ -174,7 +174,7 @@ def test_train_TrainTestSplit_continuous(tub_path):
     assert t is not None
 
     # Import the configuration
-    import donkeycar.templates.cfg_complete as cfg
+    import irmark1.templates.cfg_complete as cfg
 
     # Initial Setup
     gen_records = {}

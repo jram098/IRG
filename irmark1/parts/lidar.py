@@ -7,7 +7,7 @@ import math
 import pickle
 import serial
 import numpy as np
-from donkeycar.utils import norm_deg, dist, deg2rad, arr_to_img
+from irmark1.utils import norm_deg, dist, deg2rad, arr_to_img
 from PIL import Image, ImageDraw
 
 class RPLidar(object):

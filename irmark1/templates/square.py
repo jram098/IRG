@@ -16,17 +16,17 @@ Usage:
 
 import os
 from docopt import docopt
-import donkeycar as dk 
+import irmark1 as m1 
 
-from donkeycar.parts.datastore import TubGroup, TubHandler
-from donkeycar.parts.transform import Lambda
-from donkeycar.parts.simulation import SquareBoxCamera, MovingSquareTelemetry
-from donkeycar.parts.controller import LocalWebController
-from donkeycar.parts.keras import KerasCategorical
+from irmark1.parts.datastore import TubGroup, TubHandler
+from irmark1.parts.transform import Lambda
+from irmark1.parts.simulation import SquareBoxCamera, MovingSquareTelemetry
+from irmark1.parts.controller import LocalWebController
+from irmark1.parts.keras import KerasCategorical
 
 
 def drive(cfg, model_path=None):
-    V = dk.vehicle.Vehicle()
+    V = m1.vehicle.Vehicle()
     #initialize values
     V.mem.put(['square/angle', 'square/throttle'], (100,100))  
     
@@ -119,7 +119,7 @@ def train(cfg, tub_names, model_name):
     y_keys = ['user/angle', 'user/throttle']
     
     def rt(record):
-        record['user/angle'] = dk.utils.linear_bin(record['user/angle'])
+        record['user/angle'] = m1.utils.linear_bin(record['user/angle'])
         return record
 
     def combined_gen(gens):
@@ -157,7 +157,7 @@ def train(cfg, tub_names, model_name):
     
 if __name__ == '__main__':
     args = docopt(__doc__)
-    cfg = dk.load_config()
+    cfg = m1.load_config()
     
     if args['drive']:
         drive(cfg, args['--model'])

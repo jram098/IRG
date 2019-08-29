@@ -7,8 +7,8 @@ desc: Control a remote donkey robot over network
 
 import time
 
-from donkeycar.parts.network import MQTTValueSub, MQTTValuePub
-from donkeycar.parts.image import JpgToImgArr
+from irmark1.parts.network import MQTTValueSub, MQTTValuePub
+from irmark1.parts.image import JpgToImgArr
 
 class DonkeyRemoteContoller:
     def __init__(self, donkey_name, mqtt_broker, sensor_size=(120, 160, 3)):

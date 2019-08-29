@@ -1,9 +1,9 @@
 import os
 import platform
 import pytest
-from donkeycar.parts.datastore import Tub
-from donkeycar.parts.simulation import SquareBoxCamera, MovingSquareTelemetry
-from donkeycar.management.base import CreateCar
+from irmark1.parts.datastore import Tub
+from irmark1.parts.simulation import SquareBoxCamera, MovingSquareTelemetry
+from irmark1.management.base import CreateCar
 
 def on_pi():
     if 'arm' in platform.machine():

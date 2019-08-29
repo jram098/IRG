@@ -3,7 +3,7 @@ Rotary Encoder
 """
 
 from datetime import datetime
-from donkeycar.parts.teensy import TeensyRCin
+from irmark1.parts.teensy import TeensyRCin
 import re
 import time
 

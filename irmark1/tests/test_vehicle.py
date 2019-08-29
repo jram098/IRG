@@ -1,6 +1,6 @@
 import pytest
-import donkeycar as dk
-from donkeycar.parts.transform import Lambda
+import irmark1 as m1
+from irmark1.parts.transform import Lambda
 
 
 def _get_sample_lambda():
@@ -12,18 +12,18 @@ def _get_sample_lambda():
 
 @pytest.fixture()
 def vehicle():
-    v = dk.Vehicle()
+    v = m1.Vehicle()
     v.add(_get_sample_lambda(), outputs=['test_out'])
     return v
 
 
 def test_create_vehicle():
-    v = dk.Vehicle()
+    v = m1.Vehicle()
     assert v.parts == []
 
 
 def test_add_part():
-    v = dk.Vehicle()
+    v = m1.Vehicle()
     v.add(_get_sample_lambda(), outputs=['test_out'])
     assert len(v.parts) == 1
 
@@ -34,7 +34,7 @@ def test_vehicle_run(vehicle):
 
 
 def test_should_raise_assertion_on_non_list_inputs_for_add_part():
-    vehicle = dk.Vehicle()
+    vehicle = m1.Vehicle()
     inputs = 'any'
     with pytest.raises(AssertionError):
         vehicle.add(_get_sample_lambda(), inputs=inputs)
@@ -42,7 +42,7 @@ def test_should_raise_assertion_on_non_list_inputs_for_add_part():
 
 
 def test_should_raise_assertion_on_non_list_outputs_for_add_part():
-    vehicle = dk.Vehicle()
+    vehicle = m1.Vehicle()
     outputs = 'any'
     with pytest.raises(AssertionError):
         vehicle.add(_get_sample_lambda(), outputs=outputs)
@@ -50,7 +50,7 @@ def test_should_raise_assertion_on_non_list_outputs_for_add_part():
 
 
 def test_should_raise_assertion_on_non_boolean_threaded_for_add_part():
-    vehicle = dk.Vehicle()
+    vehicle = m1.Vehicle()
     threaded = 'non_boolean'
     with pytest.raises(AssertionError):
         vehicle.add(_get_sample_lambda(), threaded=threaded)
