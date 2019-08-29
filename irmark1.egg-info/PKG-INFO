@@ -1,18 +1,18 @@
-Metadata-Version: 2.1
-Name: donkeycar
-Version: 3.1.0
-Summary: Self driving library for python.
-Home-page: https://github.com/autorope/donkeycar
-Author: Will Roscoe, Adam Conway, Tawn Kramer
-Author-email: wroscoe@gmail.com, adam@casaconway.com, tawnkramer@gmail.com
-License: MIT
+Metadata-Version: 1.0
+Name: irmark1
+Version: 1.0
+Summary: Intelligent Racing Mark One Python Package.
+Home-page: https://github.com/augcog/IRG
+Author: Allen Y. Yang
+Author-email: yang@eecs.berkeley.edu
+License: Apache v2
 Description: # IRG
-Keywords: selfdriving cars donkeycar diyrobocars
+Keywords: selfdriving cars
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
-Classifier: License :: OSI Approved :: MIT License
+Classifier: License :: OSI Approved :: Apache v2
 Classifier: Programming Language :: Python :: 3.5
 Classifier: Programming Language :: Python :: 3.6
 Provides-Extra: nano
