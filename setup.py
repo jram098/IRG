@@ -32,7 +32,7 @@ setup(name='irmark1',
     license='Apache v2.0',
     entry_points={
         'console_scripts': [
-            'irmark1=irmark1.management.base:execute_from_command_line',
+            'irg=irmark1.management.base:execute_from_command_line',
         ],
     },
     install_requires=['numpy', 

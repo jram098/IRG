@@ -23,11 +23,6 @@ Adafruit_PCA9685
 [pc]
 matplotlib
 
-[pi]
-picamera
-Adafruit_PCA9685
-RPi.GPIO
-
 [tf]
 tensorflow>=1.9.0
 
