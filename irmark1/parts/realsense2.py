@@ -82,7 +82,72 @@ class RS_T265(object):
         time.sleep(0.1)
         self.pipe.stop()
 
+class RS_D435i(object):
+    '''
+    The Intel Realsense T265 camera is a device which uses an imu, twin fisheye cameras,
+    and an Movidius chip to do sensor fusion and emit a world space coordinate frame that 
+    is remarkably consistent.
+    '''
 
+    def __init__(self, image_w=640, image_h=480, image_d=3, image_output=True, framerate=30):
+        #Using the image_output will grab two image streams from the fisheye cameras but return only one.
+        #This can be a bit much for USB2, but you can try it. Docs recommend USB3 connection for this.
+        self.image_output = image_output
+
+        # Declare RealSense pipeline, encapsulating the actual device and sensors
+        self.pipe = rs.pipeline()
+        cfg = rs.config()
+        cfg.enable_stream(rs.stream.gyro)
+        cfg.enable_stream(rs.stream.accel)
+
+        if self.image_output:
+            cfg.enable_stream(rs.stream.color, image_w, image_h, rs.format.rgb8, framerate) # color camera
+            # cfg.enable_stream(rs.stream.depth, image_w, image_h, rs.format.z16, framerate) # depth camera
+
+        # Start streaming with requested config
+        self.pipe.start(cfg)
+        self.running = True
+
+        zero_vec = (0.0, 0.0, 0.0)
+        self.gyro = zero_vec
+        self.acc = zero_vec
+        self.img = None
+
+    def poll(self):
+        try:
+            frames = self.pipe.wait_for_frames()
+        except Exception as e:
+            logging.error(e)
+            return
+
+        if self.image_output:
+            color_frame = frames.get_color_frame()
+            self.img = np.asanyarray(color_frame.get_data())
+
+        # Fetch IMU frame
+        accel = frames.first_or_default(rs.stream.accel)
+        gyro = frames.first_or_default(rs.stream.gyro)
+        if accel and gyro:
+            self.acc = accel.as_motion_frame().get_motion_data()
+            self.gyro = gyro.as_motion_frame().get_motion_data()
+            # print('realsense accel(%f, %f, %f)' % (self.acc.x, self.acc.y, self.acc.z))
+            # print('realsense gyro(%f, %f, %f)' % (self.gyro.x, self.gyro.y, self.gyro.z))
+
+    def update(self):
+        while self.running:
+            self.poll()
+
+    def run_threaded(self):
+        return self.img
+
+    def run(self):
+        self.poll()
+        return self.run_threaded()
+
+    def shutdown(self):
+        self.running = False
+        time.sleep(0.1)
+        self.pipe.stop()
 
 if __name__ == "__main__":
     c = RS_T265()
