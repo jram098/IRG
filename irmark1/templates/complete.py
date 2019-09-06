@@ -71,6 +71,11 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
             camA = CvCam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, iCam = 0)
             camB = CvCam(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, iCam = 1)
+        elif cfg.CAMERA_TYPE == "D435i_CSIC":
+            from irmark1.parts.realsense2 import RS_D435i
+            camA = RS_D435i(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE)
+            from irmark1.parts.camera import CSICamera
+            camB = CSICamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE, gstreamer_flip=cfg.CSIC_CAM_GSTREAMER_FLIP_PARM)
         else:
             raise(Exception("Unsupported camera type: %s" % cfg.CAMERA_TYPE))
 

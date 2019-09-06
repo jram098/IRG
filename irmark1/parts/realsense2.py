@@ -84,9 +84,8 @@ class RS_T265(object):
 
 class RS_D435i(object):
     '''
-    The Intel Realsense T265 camera is a device which uses an imu, twin fisheye cameras,
-    and an Movidius chip to do sensor fusion and emit a world space coordinate frame that 
-    is remarkably consistent.
+    Intel RealSense depth camera D435i combines the robust depth sensing capabilities of the D435 with the addition of an inertial measurement unit (IMU).
+    ref: https://www.intelrealsense.com/depth-camera-d435i/ 
     '''
 
     def __init__(self, image_w=640, image_h=480, image_d=3, image_output=True, framerate=30):
