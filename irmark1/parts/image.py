@@ -3,6 +3,7 @@ import io
 from PIL import Image
 import numpy as np
 from irmark1.utils import img_to_binary, binary_to_img, arr_to_img, img_to_arr
+import irmark1
 
 class ImgArrToJpg():
 
@@ -36,8 +37,8 @@ class StereoPair:
         '''
         if image_a is not None and image_b is not None:
             width, height, _ = image_a.shape
-            grey_a = dk.utils.rgb2gray(image_a)
-            grey_b = dk.utils.rgb2gray(image_b)
+            grey_a = irmark1.utils.rgb2gray(image_a)
+            grey_b = irmark1.utils.rgb2gray(image_b)
             grey_c = grey_a - grey_b
             
             stereo_image = np.zeros([width, height, 3], dtype=np.dtype('B'))

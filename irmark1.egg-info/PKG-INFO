@@ -7,6 +7,13 @@ Author: Allen Y. Yang
 Author-email: yang@eecs.berkeley.edu
 License: Apache v2.0
 Description: # IRG
+        
+        ### Commands to re-install the package
+        * Under IRG directory, reinstall the package: ``pip install -e .[nano]``.
+        * Remove mark1 folder: ``rm -r mark1/``
+        * Create car (executable): ``irg createcar --path ~/mark1``
+        * Stream two cameras (stereo mode): ``python manage.py drive --camera stereo``
+        
 Keywords: selfdriving cars
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
