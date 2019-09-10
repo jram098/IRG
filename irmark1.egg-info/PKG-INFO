@@ -17,7 +17,7 @@ Classifier: Programming Language :: Python :: 3.5
 Classifier: Programming Language :: Python :: 3.6
 Provides-Extra: pc
 Provides-Extra: tf
+Provides-Extra: dev
 Provides-Extra: ci
 Provides-Extra: tf_gpu
-Provides-Extra: dev
 Provides-Extra: nano
