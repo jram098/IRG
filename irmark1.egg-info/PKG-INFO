@@ -15,9 +15,9 @@ Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Classifier: License :: OSI Approved :: Apache License
 Classifier: Programming Language :: Python :: 3.5
 Classifier: Programming Language :: Python :: 3.6
-Provides-Extra: pc
-Provides-Extra: tf
 Provides-Extra: dev
-Provides-Extra: ci
 Provides-Extra: tf_gpu
+Provides-Extra: ci
+Provides-Extra: tf
 Provides-Extra: nano
+Provides-Extra: pc

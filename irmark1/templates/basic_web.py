@@ -61,11 +61,6 @@ def drive(cfg, model_path=None, model_type=None):
                 return True       
 
     V.add(PilotCondition(), inputs=['user/mode'], outputs=['run_pilot'])
-    
-    #Sombrero
-    if cfg.HAVE_SOMBRERO:
-        from irmark1.parts.sombrero import Sombrero
-        s = Sombrero()
 
     class ImgPrecondition():
         '''

@@ -181,9 +181,6 @@ class CalibrateCar(BaseCommand):
 
     def run(self, args):
         from irmark1.parts.actuator import PCA9685
-        from irmark1.parts.sombrero import Sombrero
-
-        s = Sombrero()
 
         args = self.parse_args(args)
         channel = int(args.channel)

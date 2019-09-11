@@ -254,11 +254,6 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             rec_tracker_part.force_alert = 1
         ctr.set_button_down_trigger('circle', show_record_acount_status)
 
-    #Sombrero
-    if cfg.HAVE_SOMBRERO:
-        from irmark1.parts.sombrero import Sombrero
-        s = Sombrero()
-
     #IMU
     if cfg.HAVE_IMU:
         from irmark1.parts.imu import Mpu6050
