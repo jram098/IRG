@@ -139,9 +139,6 @@ SEQUENCE_LENGTH = 3             #some models use a number of images over time. T
 #IMU
 HAVE_IMU = False                #when true, this add a Mpu6050 part and records the data. Can be used with a 
 
-#SOMBRERO
-HAVE_SOMBRERO = False           #set to true when using the sombrero hat from the Donkeycar store. This will enable pwm on the hat.
-
 #RECORD OPTIONS
 RECORD_DURING_AI = False        #normally we do not record during ai mode. Set this to true to get image and steering records for your Ai. Be careful not to use them to train.
 
