@@ -22,3 +22,12 @@ STEERING_CHANNEL = 1            #channel on the 9685 pwm board 0-15
 STEERING_LEFT_PWM = 260         #pwm value for full left steering
 STEERING_RIGHT_PWM = 500        #pwm value for full right steering
 
+JOYSTICK_STEERING_SCALE = 1.0 
+
+#THROTTLE parameters for Traxxas 4-Tec chassis
+THROTTLE_CHANNEL = 0            #channel on the 9685 pwm board 0-15
+THROTTLE_FORWARD_PWM = 500      #pwm value for max forward throttle
+THROTTLE_STOPPED_PWM = 370      #pwm value for no movement
+THROTTLE_REVERSE_PWM = 300      #pwm value for max reverse throttle
+
+JOYSTICK_MAX_THROTTLE = 0.25    #reduce joystick throttle for training
