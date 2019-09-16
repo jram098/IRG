@@ -96,14 +96,6 @@ PRUNE_PERCENT_PER_ITERATION = 20 # Percenge of pruning that is perform per itera
 PRUNE_VAL_LOSS_DEGRADATION_LIMIT = 0.2 # The max amout of validation loss that is permitted during pruning.
 PRUNE_EVAL_PERCENT_OF_DATASET = .05  # percent of dataset used to perform evaluation of model.
 
-#Pi login information
-#When using the continuous train option, these credentials will
-#be used to copy the final model to your vehicle. If not using this option, no need to set these.
-PI_USERNAME = "pi"                  # username on pi
-PI_PASSWD = "raspberry"             # password is optional. Only used from Windows machine. Ubuntu and mac users should copy their public keys to the pi. `ssh-copy-id username@hostname`
-PI_HOSTNAME = "raspberrypi.local"   # the network hostname or ip address
-PI_DONKEY_ROOT = "/home/pi/mycar"   # the location of the mycar dir on the pi. this will be used to help locate the final model destination.
-
 # Region of interst cropping
 # only supported in Categorical and Linear models.
 # If these crops values are too large, they will cause the stride values to become negative and the model with not be valid.

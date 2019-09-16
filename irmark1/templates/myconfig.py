@@ -10,8 +10,8 @@
 
 # CAMERA
 CAMERA_TYPE = "D435i"
-IMAGE_W = 640
-IMAGE_H = 480
+IMAGE_W = 320
+IMAGE_H = 240
 IMAGE_DEPTH = 3         # default RGB=3, make 1 for mono
 CAMERA_FRAMERATE = 30
 # CSIC camera
@@ -30,4 +30,8 @@ THROTTLE_FORWARD_PWM = 500      #pwm value for max forward throttle
 THROTTLE_STOPPED_PWM = 370      #pwm value for no movement
 THROTTLE_REVERSE_PWM = 300      #pwm value for max reverse throttle
 
-JOYSTICK_MAX_THROTTLE = 0.25    #reduce joystick throttle for training
+JOYSTICK_MAX_THROTTLE = 0.5    #reduce joystick throttle for training
+
+#TRAINING
+CACHE_IMAGES = False
+PRUNE_CNN = True
