@@ -89,7 +89,6 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         
         inputs = []
         threaded = True
-        print("cfg.CAMERA_TYPE", cfg.CAMERA_TYPE)
         if cfg.DONKEY_GYM:
             from irmark1.parts.dgym import DonkeyGymEnv 
             cam = DonkeyGymEnv(cfg.DONKEY_SIM_PATH, env_name=cfg.DONKEY_GYM_ENV_NAME)

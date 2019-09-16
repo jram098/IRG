@@ -488,7 +488,7 @@ def default_loc(num_outputs, num_locations, input_shape):
 
 
 class KerasRNN_LSTM(KerasPilot):
-    def __init__(self, image_w =160, image_h=120, image_d=3, seq_length=3, num_outputs=2, *args, **kwargs):
+    def __init__(self, image_w =320, image_h=240, image_d=3, seq_length=3, num_outputs=2, *args, **kwargs):
         super(KerasRNN_LSTM, self).__init__(*args, **kwargs)
         image_shape = (image_h, image_w, image_d)
         self.model = rnn_lstm(seq_length=seq_length,
@@ -523,7 +523,7 @@ class KerasRNN_LSTM(KerasPilot):
         return steering, throttle
   
 
-def rnn_lstm(seq_length=3, num_outputs=2, image_shape=(120,160,3)):
+def rnn_lstm(seq_length=3, num_outputs=2, image_shape=(240,320,3)):
 
     #we now expect that cropping done elsewhere. we will adjust our expeected image size here:
     #input_shape = adjust_input_shape(input_shape, roi_crop)
