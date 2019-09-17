@@ -120,7 +120,46 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             raise(Exception("Unkown camera type: %s" % cfg.CAMERA_TYPE))
             
         V.add(cam, inputs=inputs, outputs=['cam/image_array'], threaded=threaded)
+
+    if hasattr(cfg, "REAR_CAMERA_TYPE"):
+        print("cfg.REAR_CAMERA_TYPE", cfg.REAR_CAMERA_TYPE)
+        if cfg.DONKEY_GYM:
+            from irmark1.parts.dgym import DonkeyGymEnv 
         
+        inputs = []
+        threaded = True
+        print("cfg.REAR_CAMERA_TYPE", cfg.REAR_CAMERA_TYPE)
+        if cfg.DONKEY_GYM:
+            from irmark1.parts.dgym import DonkeyGymEnv 
+            cam = DonkeyGymEnv(cfg.DONKEY_SIM_PATH, env_name=cfg.DONKEY_GYM_ENV_NAME)
+            threaded = True
+            inputs = ['angle', 'throttle']
+        elif cfg.REAR_CAMERA_TYPE == "PICAM":
+            from irmark1.parts.camera import PiCamera
+            cam = PiCamera(image_w=cfg.REAR_IMAGE_W, image_h=cfg.REAR_IMAGE_H, image_d=cfg.REAR_IMAGE_DEPTH)
+        elif cfg.REAR_CAMERA_TYPE == "WEBCAM":
+            from irmark1.parts.camera import Webcam
+            cam = Webcam(image_w=cfg.REAR_IMAGE_W, image_h=cfg.REAR_IMAGE_H, image_d=cfg.REAR_IMAGE_DEPTH)
+        elif cfg.REAR_CAMERA_TYPE == "CVCAM":
+            from irmark1.parts.cv import CvCam
+            cam = CvCam(image_w=cfg.REAR_IMAGE_W, image_h=cfg.REAR_IMAGE_H, image_d=cfg.REAR_IMAGE_DEPTH)
+        elif cfg.REAR_CAMERA_TYPE == "CSIC":
+            from irmark1.parts.camera import CSICamera
+            cam = CSICamera(image_w=cfg.REAR_IMAGE_W, image_h=cfg.REAR_IMAGE_H, image_d=cfg.REAR_IMAGE_DEPTH, framerate=cfg.REAR_CAMERA_FRAMERATE, gstreamer_flip=cfg.CSIC_CAM_GSTREAMER_FLIP_PARM)
+        elif cfg.REAR_CAMERA_TYPE == "V4L":
+            from irmark1.parts.camera import V4LCamera
+            cam = V4LCamera(image_w=cfg.REAR_IMAGE_W, image_h=cfg.REAR_IMAGE_H, image_d=cfg.REAR_IMAGE_DEPTH, framerate=cfg.REAR_CAMERA_FRAMERATE)
+        elif cfg.REAR_CAMERA_TYPE == "MOCK":
+            from irmark1.parts.camera import MockCamera
+            cam = MockCamera(image_w=cfg.REAR_IMAGE_W, image_h=cfg.REAR_IMAGE_H, image_d=cfg.REAR_IMAGE_DEPTH)
+        elif cfg.REAR_CAMERA_TYPE == "D435i":
+            from irmark1.parts.realsense2 import RS_D435i
+            cam = RS_D435i(image_w=cfg.REAR_IMAGE_W, image_h=cfg.REAR_IMAGE_H, image_d=cfg.REAR_IMAGE_DEPTH, framerate=cfg.REAR_CAMERA_FRAMERATE)
+        else:
+            raise(Exception("Unkown camera type: %s" % cfg.REAR_CAMERA_TYPE))
+
+        V.add(cam, inputs=inputs, outputs=['rear_cam/image_array'], threaded=threaded)
+
     if use_joystick or cfg.USE_JOYSTICK_AS_DEFAULT:
         #modify max_throttle closer to 1.0 to have more power
         #modify steering_scale lower than 1.0 to have less responsive steering
@@ -140,10 +179,16 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         ctr = LocalWebController()
 
     
-    V.add(ctr, 
-          inputs=['cam/image_array'],
-          outputs=['user/angle', 'user/throttle', 'user/mode', 'recording'],
-          threaded=True)
+    if hasattr(cfg, 'REAR_CAMERA_TYPE'):
+        V.add(ctr, 
+              inputs=['cam/image_array', 'rear_cam/image_array'],
+              outputs=['user/angle', 'user/throttle', 'user/mode', 'recording'],
+              threaded=True)
+    else:
+        V.add(ctr, 
+              inputs=['cam/image_array'],
+              outputs=['user/angle', 'user/throttle', 'user/mode', 'recording'],
+              threaded=True)
 
     #this throttle filter will allow one tap back for esc reverse
     th_filter = ThrottleFilter()

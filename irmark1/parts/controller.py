@@ -890,8 +890,9 @@ class JoystickController(object):
         self.chaos_monkey_steering = None
 
 
-    def run_threaded(self, img_arr=None):
+    def run_threaded(self, img_arr=None, rear_img_arr=None):
         self.img_arr = img_arr
+        self.rear_img_arr = rear_img_arr
 
         '''
         process E-Stop state machine

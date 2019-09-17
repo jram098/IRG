@@ -124,6 +124,7 @@ class LocalWebController(tornado.web.Application):
             (r"/", tornado.web.RedirectHandler, dict(url="/drive")),
             (r"/drive", DriveAPI),
             (r"/video",VideoAPI),
+            (r"/rear-video",RearVideoAPI),
             (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": self.static_file_path}),
             ]
 
@@ -139,12 +140,14 @@ class LocalWebController(tornado.web.Application):
         self.listen(self.port)
         tornado.ioloop.IOLoop.instance().start()
 
-    def run_threaded(self, img_arr=None):
+    def run_threaded(self, img_arr=None, rear_img_arr=None):
         self.img_arr = img_arr
+        self.rear_img_arr = rear_img_arr
         return self.angle, self.throttle, self.mode, self.recording
         
-    def run(self, img_arr=None):
+    def run(self, img_arr=None, rear_img_arr=None):
         self.img_arr = img_arr
+        self.rear_img_arr = rear_img_arr
         return self.angle, self.throttle, self.mode, self.recording
 
     def shutdown(self):
@@ -187,6 +190,40 @@ class VideoAPI(tornado.web.RequestHandler):
 
 
                 img = utils.arr_to_binary(self.application.img_arr)
+
+                self.write(my_boundary)
+                self.write("Content-type: image/jpeg\r\n")
+                self.write("Content-length: %s\r\n\r\n" % len(img)) 
+                self.write(img)
+                self.served_image_timestamp = time.time()
+                try:
+                    await self.flush()
+                except tornado.iostream.StreamClosedError:
+                    pass
+            else:
+                await tornado.gen.sleep(interval)
+
+
+class RearVideoAPI(tornado.web.RequestHandler):
+    '''
+    Serves a MJPEG of the images posted from the vehicle. 
+    '''
+    async def get(self):
+
+        self.set_header("Content-type", "multipart/x-mixed-replace;boundary=--boundarydonotcross")
+
+        self.served_image_timestamp = time.time()
+        my_boundary = "--boundarydonotcross\n"
+        while True:
+            
+            interval = .1
+            if self.served_image_timestamp + interval < time.time():
+
+
+                if self.application.rear_img_arr is not None:
+                    img = utils.arr_to_binary(self.application.rear_img_arr)
+                else:
+                    img = utils.arr_to_binary(self.application.img_arr)
 
                 self.write(my_boundary)
                 self.write("Content-type: image/jpeg\r\n")

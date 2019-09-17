@@ -17,6 +17,13 @@ CAMERA_FRAMERATE = 30
 # CSIC camera
 PCA9685_I2C_BUSNUM = 1   #None will auto detect, which is fine on the pi. But other platforms should specify the bus num.
 
+# REAR_CAMERA
+REAR_CAMERA_TYPE = "CSIC"
+REAR_IMAGE_W = 960
+REAR_IMAGE_H = 616
+REAR_IMAGE_DEPTH = 3
+REAR_CAMERA_FRAMERATE = 60
+
 #STEERING parameters for Traxxas 4-Tec chassis
 STEERING_CHANNEL = 1            #channel on the 9685 pwm board 0-15
 STEERING_LEFT_PWM = 260         #pwm value for full left steering
