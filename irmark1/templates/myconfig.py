@@ -24,6 +24,11 @@ REAR_IMAGE_H = 616
 REAR_IMAGE_DEPTH = 3
 REAR_CAMERA_FRAMERATE = 60
 
+# For training
+DNN_IMAGE_W = 160
+DNN_IMAGE_H = 120
+DNN_IMAGE_DEPTH = 3
+
 #STEERING parameters for Traxxas 4-Tec chassis
 STEERING_CHANNEL = 1            #channel on the 9685 pwm board 0-15
 STEERING_LEFT_PWM = 260         #pwm value for full left steering
