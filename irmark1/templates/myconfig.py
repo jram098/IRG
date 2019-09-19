@@ -10,8 +10,8 @@
 
 # CAMERA
 CAMERA_TYPE = "D435i"
-IMAGE_W = 640
-IMAGE_H = 480
+IMAGE_W = 1920
+IMAGE_H = 1080
 IMAGE_DEPTH = 3         # default RGB=3, make 1 for mono
 CAMERA_FRAMERATE = 30
 # CSIC camera
@@ -19,8 +19,8 @@ PCA9685_I2C_BUSNUM = 1   #None will auto detect, which is fine on the pi. But ot
 
 # REAR_CAMERA
 REAR_CAMERA_TYPE = "CSIC"
-REAR_IMAGE_W = 960
-REAR_IMAGE_H = 616
+REAR_IMAGE_W = 1920
+REAR_IMAGE_H = 1080
 REAR_IMAGE_DEPTH = 3
 REAR_CAMERA_FRAMERATE = 60
 
