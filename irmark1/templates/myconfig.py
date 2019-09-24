@@ -17,13 +17,6 @@ CAMERA_FRAMERATE = 30
 # CSIC camera
 PCA9685_I2C_BUSNUM = 1   #None will auto detect, which is fine on the pi. But other platforms should specify the bus num.
 
-# REAR_CAMERA
-REAR_CAMERA_TYPE = "CSIC"
-REAR_IMAGE_W = 1920
-REAR_IMAGE_H = 1080
-REAR_IMAGE_DEPTH = 3
-REAR_CAMERA_FRAMERATE = 60
-
 # For training
 DNN_IMAGE_W = 160
 DNN_IMAGE_H = 120

@@ -25,6 +25,16 @@ class JpgToImgArr():
         img_arr = img_to_arr(image)
         return img_arr
 
+class Duplicator:
+    '''
+    take one image and output several copies
+    '''
+    def __init__(self, n):
+        self.n = n
+
+    def run(self, image):
+        return [np.copy(image) for _ in range(self.n)]
+
 class StereoPair:
     '''
     take two images and put together in a single image
