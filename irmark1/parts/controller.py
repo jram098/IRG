@@ -484,10 +484,10 @@ class XboxOneJoystick(Joystick):
         self.axis_names = {
             0x00: 'left_stick_horz',
             0x01: 'left_stick_vert',
-            0x02: 'right_stick_horz',
-            0x05: 'right_stick_vert',
-            0x09: 'right_trigger',
-            0x0a: 'left_trigger',
+            0x03: 'right_stick_horz',
+            0x04: 'right_stick_vert',
+            0x02: 'right_trigger',
+            0x05: 'left_trigger',
             0x10: 'dpad_horz',
             0x11: 'dpad_vert',
         }
