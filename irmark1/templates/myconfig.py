@@ -9,7 +9,7 @@
 # """
 
 # CAMERA
-CAMERA_TYPE = "D435i"
+CAMERA_TYPE = "NANO-MARK1"
 IMAGE_W = 1920
 IMAGE_H = 1080
 IMAGE_DEPTH = 3         # default RGB=3, make 1 for mono

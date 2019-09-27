@@ -141,11 +141,11 @@ class LocalWebController(tornado.web.Application):
 
     def run_threaded(self, img_arr=None, disp_img_arr_a=None, disp_img_arr_b=None):
         self.img_arr = img_arr
-        if disp_img_arr_a is None:
+        if disp_img_arr_a is not None:
             self.disp_img_arr_a = disp_img_arr_a
         else:
             self.disp_img_arr_a = self.img_arr
-        if disp_img_arr_b is None:
+        if disp_img_arr_b is not None:
             self.disp_img_arr_b = disp_img_arr_b
         else:
             self.disp_img_arr_b = self.disp_img_arr_a
@@ -153,11 +153,11 @@ class LocalWebController(tornado.web.Application):
         
     def run(self, img_arr=None, disp_img_arr_a=None, disp_img_arr_b=None):
         self.img_arr = img_arr
-        if disp_img_arr_a is None:
+        if disp_img_arr_a is not None:
             self.disp_img_arr_a = disp_img_arr_a
         else:
             self.disp_img_arr_a = self.img_arr
-        if disp_img_arr_b is None:
+        if disp_img_arr_b is not None:
             self.disp_img_arr_b = disp_img_arr_b
         else:
             self.disp_img_arr_b = self.disp_img_arr_a
