@@ -94,7 +94,6 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         
         inputs = []
         threaded = True
-        print("cfg.CAMERA_TYPE", cfg.CAMERA_TYPE)
         if cfg.DONKEY_GYM:
             from irmark1.parts.dgym import DonkeyGymEnv 
             cam = DonkeyGymEnv(cfg.DONKEY_SIM_PATH, env_name=cfg.DONKEY_GYM_ENV_NAME)
@@ -258,11 +257,6 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             rec_tracker_part.last_num_rec_print = 0
             rec_tracker_part.force_alert = 1
         ctr.set_button_down_trigger('circle', show_record_acount_status)
-
-    #Sombrero
-    if cfg.HAVE_SOMBRERO:
-        from irmark1.parts.sombrero import Sombrero
-        s = Sombrero()
 
     #IMU
     if cfg.HAVE_IMU:
