@@ -1,3 +1,0 @@
-[console_scripts]
-irg = irmark1.management.base:execute_from_command_line
-
