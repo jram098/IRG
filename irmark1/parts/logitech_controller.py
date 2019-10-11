@@ -11,7 +11,7 @@ COMMAND_STEERING = 1
 
 
 class LogitechSteeringWheelController(object):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         bc_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         bc_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         bc_sock.bind(('', BROADCAST_PORT))
@@ -30,6 +30,8 @@ class LogitechSteeringWheelController(object):
         print('Matched  {} {}'.format(addr[0], addr[1]))
         self.new_throttle = 0
         self.new_steering = 0
+        self.throttle_scale = kwargs['throttle_scale']
+        self.steering_scale = kwargs['steering_scale']
 
     def update(self):
         buffer = b''
@@ -41,13 +43,16 @@ class LogitechSteeringWheelController(object):
                 buffer = buffer[8:]
 
                 if cmd == COMMAND_THROTTLE:
-                    self.new_throttle = val / 32767
+                    self.new_throttle = val / 32767 * self.throttle_scale
                 elif cmd == COMMAND_STEERING:
-                    self.new_steering = val / 32767
+                    self.new_steering = val / 32767 * self.steering_scale
                 # print(self.new_throttle, self.new_steering)
 
-    def run_threaded(self):
+    def run_threaded(self, img_arr=None):
         return self.new_steering, self.new_throttle, 'user', False
+
+    def set_deadzone(self, val):
+        self.dead_zone = val
 
 
 if __name__ == '__main__':

@@ -1347,6 +1347,9 @@ def get_js_controller(cfg):
         cont_class = WiiUController
     elif cfg.CONTROLLER_TYPE == "F710":
         cont_class = LogitechJoystickController
+    elif cfg.CONTROLLER_TYPE == "wheel":
+        from irmark1.parts.logitech_controller import LogitechSteeringWheelController
+        cont_class = LogitechSteeringWheelController
     else:
         raise("Unknown controller type: " + cfg.CONTROLLER_TYPE)
 
