@@ -28,7 +28,7 @@ THROTTLE_FORWARD_PWM = 500      #pwm value for max forward throttle
 THROTTLE_STOPPED_PWM = 370      #pwm value for no movement
 THROTTLE_REVERSE_PWM = 300      #pwm value for max reverse throttle
 
-CONTROLLER_TYPE = "xbox"
+CONTROLLER_TYPE = "wheel"
 JOYSTICK_MAX_THROTTLE = 0.2
 JOYSTICK_STEERING_SCALE = 1.0 
 
