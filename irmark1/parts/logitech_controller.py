@@ -1,5 +1,4 @@
 import socket
-import _thread
 import struct
 
 
@@ -32,10 +31,7 @@ class LogitechSteeringWheelController(object):
         self.new_throttle = 0
         self.new_steering = 0
 
-        # _thread.start_new_thread(self.receiver_thread, ())
-        self.receiver_thread()
-
-    def receiver_thread(self):
+    def update(self):
         buffer = b''
         while True:
             data = self.tcp_sock.recv(4096)
@@ -45,14 +41,13 @@ class LogitechSteeringWheelController(object):
                 buffer = buffer[8:]
 
                 if cmd == COMMAND_THROTTLE:
-                    self.new_throttle = val
+                    self.new_throttle = val / 32767
                 elif cmd == COMMAND_STEERING:
-                    self.new_steering = val
-                print(self.new_throttle, self.new_steering)
-                # raise Exception('{} {}'.format(self.new_throttle, self.new_steering))
+                    self.new_steering = val / 32767
+                # print(self.new_throttle, self.new_steering)
 
     def run_threaded(self):
-        pass
+        return self.new_steering, self.new_throttle, 'user', False
 
 
 if __name__ == '__main__':
