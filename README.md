@@ -43,7 +43,7 @@ conda update -n base -c defaults conda
 
 - In the base IRG project folder, create the IRG anaconda environment
 ```bash
-conda env create -f install\envs\ubuntu.yml
+conda env create -f install/envs/ubuntu.yml
 conda activate irg
 pip install -e .[pc]
 ```
@@ -55,7 +55,7 @@ conda install tensorflow-gpu
 
 - Finally, create a local executable directory
 ```bash
-irg createcar --path ~\ROAR
+irg createcar --path ~/ROAR
 ```
 
 3. Mac OS X
@@ -67,12 +67,12 @@ conda update -n base -c defaults conda
 
 - In the base IRG project folder, create the IRG anaconda environment
 ```bash
-conda env create -f install\envs\mac.yml
+conda env create -f install/envs/mac.yml
 conda activate irg
 pip install -e .[pc]
 ```
 
 - Finally, create a local executable directory
 ```bash
-irg createcar --path ~\ROAR
+irg createcar --path ~/ROAR
 ```
