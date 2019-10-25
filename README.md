@@ -76,3 +76,21 @@ pip install -e .[pc]
 ```bash
 irg createcar --path ~/ROAR
 ```
+
+## Commands to re-install the package
+* Under IRG directory, reinstall the package
+```bash
+pip install -e .[nano]
+```
+* Remove mark1 folder
+```bash
+rm -r mark1/
+```
+* Create car (executable)
+```bash
+irg createcar --path ~/mark1
+```
+* Run drive script
+```bash
+python manage.py drive
+```

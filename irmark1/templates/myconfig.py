@@ -9,13 +9,19 @@
 # """
 
 # CAMERA
-CAMERA_TYPE = "D435i"
-IMAGE_W = 320
-IMAGE_H = 240
+CAMERA_TYPE = "NANO-MARK1"
+IMAGE_W = 1280
+IMAGE_H = 720
+
 IMAGE_DEPTH = 3         # default RGB=3, make 1 for mono
 CAMERA_FRAMERATE = 30
 # CSIC camera
 PCA9685_I2C_BUSNUM = 1   #None will auto detect, which is fine on the pi. But other platforms should specify the bus num.
+
+# For training
+DNN_IMAGE_W = 160
+DNN_IMAGE_H = 120
+DNN_IMAGE_DEPTH = 3
 
 #STEERING parameters for Traxxas 4-Tec chassis
 STEERING_CHANNEL = 1            #channel on the 9685 pwm board 0-15

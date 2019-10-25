@@ -78,8 +78,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         V.add(camB, outputs=['cam/image_array_b'], threaded=True)
 
         from irmark1.parts.image import StereoPair
-
-        V.add(StereoPair(), inputs=['cam/image_array_a', 'cam/image_array_b'], 
+        V.add(StereoPair(), inputs=['cam/image_array_a', 'cam/image_array_b'],
             outputs=['cam/image_array'])
 
     else:
@@ -115,11 +114,29 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         elif cfg.CAMERA_TYPE == "D435i":
             from irmark1.parts.realsense2 import RS_D435i
             cam = RS_D435i(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE)
+        elif cfg.CAMERA_TYPE ==  "NANO-MARK1":
+            from irmark1.parts.realsense2 import RS_D435i
+            from irmark1.parts.camera import CSICamera
+
+            camA = CSICamera(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE, gstreamer_flip=cfg.CSIC_CAM_GSTREAMER_FLIP_PARM)
+            camB = RS_D435i(image_w=cfg.IMAGE_W, image_h=cfg.IMAGE_H, image_d=cfg.IMAGE_DEPTH, framerate=cfg.CAMERA_FRAMERATE)
         else:
             raise(Exception("Unkown camera type: %s" % cfg.CAMERA_TYPE))
-            
-        V.add(cam, inputs=inputs, outputs=['cam/image_array'], threaded=threaded)
-        
+
+        if cfg.CAMERA_TYPE == "D435i":
+            V.add(cam, inputs=inputs, outputs=['cam/image_array_a', 'cam/image_array_b', 'cam/imu_array'], threaded=threaded)
+            from irmark1.parts.image import StereoPair
+            V.add(StereoPair(), inputs=['cam/image_array_a', 'cam/image_array_b'],
+            outputs=['cam/image_array'])
+        elif cfg.CAMERA_TYPE ==  "NANO-MARK1":
+            V.add(camA, outputs=['cam/image_array_a'], threaded=True)
+            V.add(camB, outputs=['cam/image_array_b', 'cam/image_array_c', 'cam/imu_array'], threaded=True)
+            from irmark1.parts.image import StereoPair
+            V.add(StereoPair(), inputs=['cam/image_array_a', 'cam/image_array_b'],
+            outputs=['cam/image_array'])
+        else:
+            V.add(cam, inputs=inputs, outputs=['cam/image_array'], threaded=threaded)
+
     if use_joystick or cfg.USE_JOYSTICK_AS_DEFAULT:
         #modify max_throttle closer to 1.0 to have more power
         #modify steering_scale lower than 1.0 to have less responsive steering
@@ -140,7 +157,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     
     V.add(ctr, 
-          inputs=['cam/image_array'],
+          inputs=['cam/image_array', 'cam/image_array_a', 'cam/image_array_b'],
           outputs=['user/angle', 'user/throttle', 'user/mode', 'recording'],
           threaded=True)
 

@@ -84,9 +84,8 @@ class RS_T265(object):
 
 class RS_D435i(object):
     '''
-    The Intel Realsense T265 camera is a device which uses an imu, twin fisheye cameras,
-    and an Movidius chip to do sensor fusion and emit a world space coordinate frame that 
-    is remarkably consistent.
+    Intel RealSense depth camera D435i combines the robust depth sensing capabilities of the D435 with the addition of an inertial measurement unit (IMU).
+    ref: https://www.intelrealsense.com/depth-camera-d435i/
     '''
 
     def __init__(self, image_w=640, image_h=480, image_d=3, image_output=True, framerate=30):
@@ -102,7 +101,7 @@ class RS_D435i(object):
 
         if self.image_output:
             cfg.enable_stream(rs.stream.color, image_w, image_h, rs.format.rgb8, framerate) # color camera
-            # cfg.enable_stream(rs.stream.depth, image_w, image_h, rs.format.z16, framerate) # depth camera
+            cfg.enable_stream(rs.stream.depth, image_w, image_h, rs.format.z16, framerate) # depth camera
 
         # Start streaming with requested config
         self.pipe.start(cfg)
@@ -112,6 +111,7 @@ class RS_D435i(object):
         self.gyro = zero_vec
         self.acc = zero_vec
         self.img = None
+        self.dimg = None
 
     def poll(self):
         try:
@@ -122,7 +122,9 @@ class RS_D435i(object):
 
         if self.image_output:
             color_frame = frames.get_color_frame()
+            depth_frame = frames.get_depth_frame()
             self.img = np.asanyarray(color_frame.get_data())
+            self.dimg = np.asanyarray(depth_frame.get_data())
 
         # Fetch IMU frame
         accel = frames.first_or_default(rs.stream.accel)
@@ -138,7 +140,7 @@ class RS_D435i(object):
             self.poll()
 
     def run_threaded(self):
-        return self.img
+        return self.img, self.dimg, (self.acc, self.gyro)
 
     def run(self):
         self.poll()

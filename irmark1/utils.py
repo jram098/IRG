@@ -113,6 +113,9 @@ def rgb2gray(rgb):
     '''
     take a numpy rgb image return a new single channel image converted to greyscale
     '''
+    # image not rgb
+    if len(rgb.shape)<3 or rgb.shape[-1]<3:
+        return rgb
     return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
 
 
@@ -143,8 +146,8 @@ def load_scaled_image_arr(filename, cfg):
     import irmark1 as m1
     try:
         img = Image.open(filename)
-        if img.height != cfg.IMAGE_H or img.width != cfg.IMAGE_W:
-            img = img.resize((cfg.IMAGE_W, cfg.IMAGE_H))
+        if img.height != cfg.DNN_IMAGE_H or img.width != cfg.DNN_IMAGE_W:
+            img = img.resize((cfg.DNN_IMAGE_W, cfg.DNN_IMAGE_H))
         img_arr = np.array(img)
         img_arr = normalize_and_crop(img_arr, cfg)
         croppedImgH = img_arr.shape[0]
@@ -428,7 +431,7 @@ def get_model_by_type(model_type, cfg):
         model_type = cfg.DEFAULT_MODEL_TYPE
     print("\"get_model_by_type\" model Type is: {}".format(model_type))
 
-    input_shape = (cfg.IMAGE_H, cfg.IMAGE_W, cfg.IMAGE_DEPTH)
+    input_shape = (cfg.DNN_IMAGE_H, cfg.DNN_IMAGE_W, cfg.DNN_IMAGE_DEPTH)
     roi_crop = (cfg.ROI_CROP_TOP, cfg.ROI_CROP_BOTTOM)
 
     if model_type == "tflite_linear":
