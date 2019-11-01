@@ -15,6 +15,7 @@ import subprocess
 import math
 import random
 import time
+import cv2
 
 from PIL import Image
 import numpy as np
@@ -160,7 +161,34 @@ def load_scaled_image_arr(filename, cfg):
         img_arr = None
     return img_arr
 
-        
+def normal_at_point(xyz_map, pt, radius):
+    center = xyz_map[pt[0], pt[1]]
+    if center[2] == 0:
+        return 0
+    xr = int(radius) if pt[0] < radius else -int(radius)
+    yr = int(radius) if pt[1] < radius else -int(radius)
+    mul = ((xr > 0) ^ (yr > 0)) * (-2) + 1
+
+    cross = (xyz_map[pt[1]+yr, pt[0]] - center).cross(xyz_map[pt[1], pt[0]+xr] - center)
+    return cv.normalize(cross) * mul
+
+def compute_normal_map(xyz_map, normal_dist=0, resolution=480, fill_in=False):
+    stripes = xyz_map.size / resolution
+    output_mat = None
+    if fill_in:
+        output_mat = cv.CreateMat(stripes, cv2.CV_32FC3)
+    else:
+        output_mat = cv.CreateMat(xyz_map.size, cv2.CV_32FC3)
+    R, C = stripes.height, stripe.width
+    step = 1 if fill_in else resolution
+    multiplier = 1 if fill_in else resolution
+
+    for r in range(R*C):
+        i, j = int(r / C * multiplier), int(r % c * multiplier)
+        output_mat[i, j] = normal_at_point(xyz_map, (j, i) * int(resolution / step), normal_dist)
+
+
+
 
 '''
 FILES

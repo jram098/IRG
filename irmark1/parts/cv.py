@@ -1,6 +1,8 @@
 import time
 import cv2
 import numpy as np
+from irmark1.utils import compute_normal_map
+from collections import namedtuple
 
 class ImgGreyscale():
 
@@ -213,3 +215,67 @@ class CvImageView(object):
 
     def shutdown(self):
         cv2.destroyAllWindows()
+
+class PlaneDetect():
+
+    def __init__(self, params='not_defined', debug=False):
+        self.planes = []
+        self.normal_map = None
+        if params == 'not_defined':
+            Param = namedtuple('Param', ['normalResolution', 'planeMinArea'])
+            self.params = Param(3, 0.0120)
+
+        self.debug = debug
+    def get_normal_map(self):
+        return self.normal_map
+
+    def detect_plane_helper(self, xyz_map, normal_map):
+        R, C = xyz_map.rows, xyz_map.cols
+        N = R * C
+        flood_fill_map = cv2.CreateMat(R, C, cv2.CV_8U)
+        for r in range(R):
+            for c in range(C):
+                z = flood_fill_map[r, c][2]
+                flood_fill_map[r, c][2] = 255 if z > 0 else 0
+            visPtr = flood_fill_map
+        
+        compId = -1
+        
+        allIndices = []
+        planePointsIJ = []
+        planePointsXYZ = []
+        planeEquation = []
+
+        subplane_min_points = self.params.subplaneMinPoints * N /  (self.params.normalResolution ** 2)
+        plane_min_points = self.params.planeMinPoints * N /  (self.params.normalResolution ** 2)
+        subplane_min_inliers = self.params.planeEquationMinInliers * N /  (self.params.normalResolution ** 2)
+
+        return output_equations, output_points, output_points_xyz
+
+    def detect(self, image):
+        self.planes = []
+        equations, points, pointsXYZ = [], [], []
+
+        compute_normal_map(image, self.normal_map, 8, self.params.normalResolution, False)
+        equations, points, pointsXYZ = self.detect_plane_helper(image, self.normal_map)
+
+        for i in range(len(equations)):
+            plane = FramePlane(equations[i], points[i], pointsXYZ[i], image, self.params)
+
+            if (plane.getSurfArea() > self.params.planeMinArea) {
+                planes.append(plane)
+            }
+        }
+        self.planes.sort(key=lambda x: x.getPoints().size(), reverse = False)
+
+    def run(self, img_arr):
+        return cv2.Canny(img_arr, 
+                         self.low_threshold, 
+                         self.high_threshold)
+
+    def shutdown(self):
+        pass
+
+class FramePlane():
+
+    def __init__(self):
