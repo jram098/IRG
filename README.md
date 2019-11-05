@@ -76,3 +76,16 @@ pip install -e .[pc]
 ```bash
 irg createcar --path ~/ROAR
 ```
+
+## How to re-install the package
+
+When you previously installed a version of the IRG package, after pulling the latest version, a re-install is needed to update the changes in local binaries. 
+
+- Under the root IRG directory, re-install the package on Jetson Nano
+```bash
+pip install -e .[nano]
+```
+On PC, run
+```bash
+pip install -e .[pc]
+```

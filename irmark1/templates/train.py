@@ -387,8 +387,8 @@ def train(cfg, tub_names, model_name, transfer_model, model_type, continuous, au
             else:    
                 model_in_shape = kl.model.input.shape
 
-            has_imu = type(kl) is KerasIMU
-            has_bvh = type(kl) is KerasBehavioral
+            dnn_imu = type(kl) is KerasIMU
+            dnn_bvh = type(kl) is KerasBehavioral
             img_out = type(kl) is KerasLatent
             
             if img_out:
@@ -444,10 +444,10 @@ def train(cfg, tub_names, model_name, transfer_model, model_type, continuous, au
                             rz_img_arr = cv2.resize(img_arr, (127, 127)) / 255.0
                             out_img.append(rz_img_arr[:,:,0].reshape((127, 127, 1)))
                             
-                        if has_imu:
+                        if dnn_imu:
                             inputs_imu.append(record['imu_array'])
                         
-                        if has_bvh:
+                        if dnn_bvh:
                             inputs_bvh.append(record['behavior_arr'])
 
                         inputs_img.append(img_arr)
@@ -461,9 +461,9 @@ def train(cfg, tub_names, model_name, transfer_model, model_type, continuous, au
                     img_arr = np.array(inputs_img).reshape(batch_size,\
                         cfg.TARGET_H, cfg.TARGET_W, cfg.TARGET_D)
 
-                    if has_imu:
+                    if dnn_imu:
                         X = [img_arr, np.array(inputs_imu)]
-                    elif has_bvh:
+                    elif dnn_bvh:
                         X = [img_arr, np.array(inputs_bvh)]
                     else:
                         X = [img_arr]

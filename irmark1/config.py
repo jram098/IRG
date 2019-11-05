@@ -74,9 +74,15 @@ def load_config(config_path=None):
     
     #derivative settings
     if hasattr(cfg, 'IMAGE_H') and hasattr(cfg, 'IMAGE_W'): 
-        cfg.TARGET_H = cfg.IMAGE_H - cfg.ROI_CROP_TOP - cfg.ROI_CROP_BOTTOM
-        cfg.TARGET_W = cfg.IMAGE_W
-        cfg.TARGET_D = cfg.IMAGE_DEPTH
+        if not hasattr(cfg, 'DNN_IMAGE_H'):
+            cfg.DNN_IMAGE_H = cfg.IMAGE_H
+        if not hasattr(cfg, 'DNN_IMAGE_W'):
+            cfg.DNN_IMAGE_W = cfg.IMAGE_W
+        if not hasattr(cfg, 'DNN_IMAGE_DEPTH'):
+            cfg.DNN_IMAGE_DEPTH = cfg.IMAGE_DEPTH
+        cfg.TARGET_H = cfg.DNN_IMAGE_H - cfg.ROI_CROP_TOP - cfg.ROI_CROP_BOTTOM
+        cfg.TARGET_W = cfg.DNN_IMAGE_W
+        cfg.TARGET_D = cfg.DNN_IMAGE_DEPTH
 
     print()
 
