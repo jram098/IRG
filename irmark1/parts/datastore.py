@@ -235,6 +235,12 @@ class Tub(object):
                 name = self.make_file_name(key, ext='.jpg')
                 img.save(os.path.join(self.path, name))
                 json_data[key]=name
+            elif typ == 'lossless_image_array':
+                img = Image.fromarray(np.uint8(val))
+                name = self.make_file_name(key, ext='.png')
+                # https://pillow.readthedocs.io/en/3.1.x/handbook/image-file-formats.html
+                img.save(os.path.join(self.path, name), compress_level=0)
+                json_data[key]=name
 
             else:
                 msg = 'Tub does not know what to do with this type {}'.format(typ)
